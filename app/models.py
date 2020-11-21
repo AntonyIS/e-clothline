@@ -1,8 +1,9 @@
 from app import db
 from datetime import datetime
+from flask_login import UserMixin
+from app import login
 
-
-class User(db.Model):
+class User(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(64), index=True)
     middlename = db.Column(db.String(64), index=True)
@@ -34,3 +35,8 @@ class Product(db.Model):
 
     def __repr__(self):
         return '<Product {}>'.format(self.name)
+
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
